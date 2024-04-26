@@ -261,7 +261,7 @@ void BackendServer::handleMainServer() {
         if (roomData.find(roomcode) != roomData.end()) {
             if (roomData[roomcode] > 0) {
                 roomData[roomcode] -= 1;
-                std::cout << "Successful reservation. The count of Room <roomcode> is now <updated_count>." << std::endl;
+                std::cout << "Successful reservation. The count of Room " << roomcode << " is now " << roomData[roomcode] << "." << std::endl;
                 replyMsg = MSG_RESERVE_SUCCEED;
                 replyMsg += "\n" + childSockfdStr + "\n" + roomcode + "," + std::to_string(roomData[roomcode]);
             }
