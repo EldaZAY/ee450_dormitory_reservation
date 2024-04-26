@@ -5,13 +5,35 @@ Name: Aiyu Zhang \
 Student ID: 8524183902
 
 ### 1 Project Abstract
+The dormitory reservation systems contains one main server, three backend servers, and multiple clients. The backend servers each takes charge of one type of room layout and communicates only with the main server over UDP. The main server accepts client connections over TCP, handles the login statuses of clients (as members or guests), forwards requests of clients to backend servers, and forward responses from backend servers to clients. 
 
+The encryption of the client login credentials is by offsetting. The optional part of more advanced encryption is not completed. 
 
 ### 2 Code Files Description
 #### 2.1 server_utils:
-#### 2.2 Server<S/D/U>:
+Contains constants (designated port numbers, operation codes that are sent in messages, etc.), class BackendServer and other common server utility functions.
+
+class BackendServer: 
+Stores room availability data in a map, stores socket related info of itself and the main server. Implements all methods that are needed for booting up and running a backend server. 
+
+#### 2.2 Server<S/D/U>: 
+Creates an instance of class BackendServer, loads data from the input file, and sends initialization data to the main server. The main loop keeps handling main server messages and sending responses.
+
 #### 2.3 ServerM:
+Contains class MainServer and runs the Server M. 
+
+class MainServer: 
+Stores all roomdata (corresponding to the data from backend servers) in a map, stores client login status and member status, stores socket related info of itself and the backend servers. Implements all methods that deal with clients and backend servers. 
+
+main: Creates an instance of class MainServer, boots up and adds backend servers' info. Uses threading to run two loops simultaneously, one for handling clients, one for handling backend servers. 
+
 #### 2.4 client:
+Contains class Client and runs a client.
+
+class Client: 
+Stores socket info of itself and the main server. Implements methods that deal with on-screem prompts, login process including encryption, and communication with the main server.
+
+main: Creates an instance of class Client, boots up, handles log in, and handles requests from the user. 
 
 
 ### 3 Exchanged Message Format
@@ -87,5 +109,8 @@ Message Table:
 
 
 ### 4 Project Idiosyncrasy
+- The validity of a guest's username is not checked (for the project's on-screem message requirement doesn't include this situation)
+- In the provided member information file, some of the usernames is less than 5 chars long, which do not satisfy the described validity requirement (5-50 chars). Using the original member file may result in login failure.
 
 ### 5 Reused Code
+Some of the codes referred to Beej's Guide and are marked with comments. There is no other reference or reused code. 
